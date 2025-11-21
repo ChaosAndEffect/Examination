@@ -1,3 +1,5 @@
+using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,6 +18,7 @@ public class PlatformerMovement : MonoBehaviour
     [SerializeField] private float jumpForce = 10f;
     // [SerializeField] private float gravityMultiplier = 1;    //unused
     [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private TextMeshProUGUI scoreText;
 
     public bool controlEnabled { get; set; } = true; // You can edit this variable from Unity Events
     
@@ -24,8 +27,11 @@ public class PlatformerMovement : MonoBehaviour
     
     // Platformer specific variables
     private CircleCollider2D groundCheckCollider;
+    private CapsuleCollider2D capsuleCollider;
     private LayerMask groundLayer = ~0; // ~0 is referring to EVERY layer. Do you want a specific layer? Serialize the variable and assign the Layer of your choice.
+    [SerializeField] LayerMask collectibleLayer;
     private Vector2 velocity;
+    private int score;
     private bool jumpInput;
     private bool jumpReleased;
     private bool wasGrounded;
@@ -37,6 +43,7 @@ public class PlatformerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         
+        capsuleCollider = GetComponent<CapsuleCollider2D>();
         groundCheckCollider = GetComponent<CircleCollider2D>();
         groundCheckCollider.isTrigger = true;
         
@@ -110,6 +117,8 @@ public class PlatformerMovement : MonoBehaviour
         }
     }
 
+
+
     private void ApplyGravity()
     {
         // Applies a set gravity for when player is grounded
@@ -138,6 +147,12 @@ public class PlatformerMovement : MonoBehaviour
                 velocity.y += Physics2D.gravity.y * Time.deltaTime;
             }
         }
+    }
+
+    public void SetScore()
+    {
+        score++;
+        scoreText.SetText($"{score}");
     }
     
     Vector2 TranslateInputToVelocity(Vector2 input)
