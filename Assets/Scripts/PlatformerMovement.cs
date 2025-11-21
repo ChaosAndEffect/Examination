@@ -38,6 +38,8 @@ public class PlatformerMovement : MonoBehaviour
     private bool isGrounded;
 
     [SerializeField] private Animator animator;
+    private Animator footStepAnimator;
+
     
     void Awake()
     {
@@ -50,7 +52,7 @@ public class PlatformerMovement : MonoBehaviour
         // Set gravity scale to 0 so player won't "fall" 
         rb.gravityScale = 0;
 
-        //animator = GetComponent<Animator>();
+        footStepAnimator = GetComponent<Animator>();
     }
     
     void Update()
@@ -102,6 +104,7 @@ public class PlatformerMovement : MonoBehaviour
         
         // Write movement animation code here. (Suggestion: send your current velocity into the Animator for both the x- and y-axis.)
         animator.SetFloat("xVelocity", velocity.x);
+        footStepAnimator.SetFloat("xVelocity", velocity.x);
     }
 
     private bool IsGrounded()
